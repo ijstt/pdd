@@ -49,3 +49,23 @@ class Database:
         for row in result:
             ans.append(row[1])
         return ans
+
+    def get_ques(self):
+        with self.connection:
+            result = self.cursor.execute("SELECT * FROM `que`").fetchall()
+
+            ans = []
+            for row in result:
+                ans.append({row[0]: {row[1]: row[2]}})
+            return ans
+
+    def set_tb(self, tb, tg_id):
+        with self.connection:
+            return self.cursor.execute("UPDATE `users` SET `tb` = ? WHERE `tg_id` = ?",
+                                       (tb, tg_id,))
+
+    def get_tb(self, tg_id):
+        with self.connection:
+            result = self.cursor.execute("SELECT `tb` FROM `users` WHERE `tg_id` = ?",
+                                         [tg_id]).fetchall()
+            return result[0][0]
